@@ -1,0 +1,138 @@
+---
+title: "Day 3 - Loading Data"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## tldr
+
+```{r, eval=FALSE}
+library(readr)
+df <- read_csv(file = 'path/to/file')
+```
+
+## The `readr` Package
+
+Load the `readr` package. We'll also load `dplyr` for some data cleaning.
+
+```{r packages, message=FALSE}
+library(readr)
+library(dplyr)
+```
+
+
+
+```{r}
+read_delim('x,y,z\n1,2,3', delim = ',')
+```
+
+```{r}
+read_delim('x|y|z\n1|2|3', delim = '|')
+```
+
+The `read_csv` and `read_tsv` are convenience wrappers around `read_delim`, 
+with the `delim` argument pre-set for you.
+
+```{r}
+read_csv('x,y,z\n1,2,3')
+```
+
+```{r}
+read_tsv('x\ty\tz\n1\t2\t3')
+```
+
+## Parsing Issues
+
+```{r, warning=FALSE}
+df <- read_csv('data/example.csv')
+tail(df)
+```
+
+```{r}
+problems(df)
+```
+
+The issue is that the `read_*` functions will read in the first 1000 lines of a 
+file and use that to guess the column type. The `guess_max` argument can be set 
+higher if needed.
+
+```{r}
+df <- read_csv('data/example.csv', guess_max = 1001)
+tail(df)
+```
+
+```{r}
+df <- read_csv(
+    'data/example.csv',
+    col_types = cols(
+      x = col_double(), 
+      y = col_character()
+    )
+  )
+
+tail(df)
+```
+
+```{r, message=FALSE}
+microbenchmark::microbenchmark(
+  guess = read_csv(
+    'data/example.csv', 
+    guess_max = 1001),
+  specified = read_csv(
+    'data/example.csv',
+    col_types = cols(
+      x = col_double(), 
+      y = col_character()
+    )
+  ),
+  control = list(warmup = 10)
+)
+```
+
+## Vector Types
+
+### logical
+
+### integer
+
+### double
+
+### character
+
+
+## Object Size
+
+```{r}
+df_char <- read_csv(
+    'data/example.csv',
+    col_types = cols(
+      x = col_double(), 
+      y = col_character()
+    )
+  )
+
+pryr::object_size(df_char)
+```
+
+```{r}
+df_factor <- df_char %>%
+  mutate(y = as.factor(y))
+
+pryr::object_size(df_factor)
+```
+
+## The `jsonlite` Package
+
+```{r}
+library(jsonlite)
+data_json <- fromJSON('data/sample.json')
+```
+
+
+
+## Resources
+
+* [r4ds.had.co.nz/data-import.html](r4ds.had.co.nz/data-import.html)
