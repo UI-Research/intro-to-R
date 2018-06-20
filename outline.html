@@ -124,43 +124,146 @@ $(document).ready(function () {
 </div>
 
 
-<div id="exercises" class="section level1">
-<h1>Exercises</h1>
-<div id="exercise-1" class="section level2">
-<h2>Exercise 1</h2>
-<p>Calculate <code>1 + 2 - 3 * 4 / 5</code> by submitting the code in the console. Now, create a .R script, add the code, and calculate the answer by submitting the code from the script.</p>
+<div id="day-1" class="section level1">
+<h1>Day 1</h1>
+<div id="the-owl" class="section level2">
+<h2>The Owl</h2>
+<p>Statistical programming, data visualization, and public policy analysis are difficult. Four hours isn’t enough to master R. The goal of this training is to offer hands-on experience and enough comfort that beginners can ask the right question when hitting his or her first wall.</p>
 </div>
-<div id="exercise-2" class="section level2">
-<h2>Exercise 2</h2>
-<p>Assign the value of <code>1 + 2 - 3 * 4 / 5</code> to your name. Add a comment explaining the calculation.</p>
+<div id="why-r" class="section level2">
+<h2>Why R?</h2>
+<ul>
+<li>Free!</li>
+<li>Open source</li>
+<li>Powerful and extensible</li>
+</ul>
 </div>
-<div id="exercise-3" class="section level2">
-<h2>Exercise 3</h2>
-<p>Look up the function <code>mean()</code> with <code>?</code>. What arguments does mean have?</p>
+<div id="how-do-i-turn-this-thing-on" class="section level2">
+<h2>How do I turn this thing on?</h2>
+<ul>
+<li>Difference between R and RStudio</li>
+<li>R is a calculator</li>
+<li>Submit code at the console</li>
+<li>Submit code from scripts</li>
+</ul>
 </div>
-<div id="exercise-4" class="section level2">
-<h2>Exercise 4</h2>
-<p>Install <code>tidyverse</code>. Load <code>tidyverse</code>.</p>
+<div id="basic-syntax" class="section level2">
+<h2>Basic syntax</h2>
+<ul>
+<li><code>&lt;-</code> is the assignment operator</li>
+<li><code>#</code> begins a comment</li>
+<li><code>?</code> searches for functions and data sets. Drop the parentheses!</li>
+<li><code>%&gt;%</code> is the pipe operator</li>
+<li><code>c()</code> is concatenate</li>
+</ul>
 </div>
-<div id="exercise-5" class="section level2">
-<h2>Exercise 5</h2>
-<p><code>storms</code> is a data set from <code>library(dplyr)</code> which is loaded by <code>library(tidyverse)</code>. Submit <code>storms</code> in the console to see the <code>tibble</code>. Submit <code>View(storms)</code> to see the <code>tibble</code> as a window. Use <code>glimpse(storms)</code> to see a summary of <code>storms</code>. Assign <code>storms</code> to a name with <code>&lt;-</code> so it shows up in the global environment.</p>
+<div id="functions" class="section level2">
+<h2>Functions</h2>
+<ul>
+<li>R is based on functions of the form <code>mean()</code>. R has powerful tools for creating custom functions.</li>
+</ul>
 </div>
-<div id="exercise-6" class="section level2">
-<h2>Exercise 6</h2>
-<p>Capitalize <code>name</code> in the <code>storms</code> data set and assign it to a new data set with just <code>Name</code>, <code>year</code>, <code>month</code>, and <code>day</code>.</p>
+<div id="r-packages" class="section level2">
+<h2>R packages</h2>
+<ul>
+<li><code>install.packages(&quot;tidyverse&quot;)</code></li>
+<li><code>library(tidyverse)</code></li>
+<li>R has powerful tools for creating custom packages.</li>
+</ul>
 </div>
-<div id="exercise-7" class="section level2">
-<h2>Exercise 7</h2>
-<p>Find any storms that were active in June. Find any storms that were active on the 20th of a month. Find any storms that were active on June 20th.</p>
+<div id="rectangles" class="section level2">
+<h2>Rectangles</h2>
+<ul>
+<li><code>tidyverse</code></li>
+<li>The idea is to only use one data structure, and a host of functions that are specialized to that data structure.</li>
+</ul>
 </div>
-<div id="exercise-8" class="section level2">
-<h2>Exercise 8</h2>
-<p><code>wind</code> is measured in knots. Convert <code>wind</code> into miles per hour. Each knot is equal to 1.15078 miles per hour.</p>
+<div id="view" class="section level2">
+<h2>View()</h2>
 </div>
-<div id="exercise-9" class="section level2">
-<h2>Exercise 9</h2>
-<p>Calculate the mean and median wind speed in knots from the data set <code>storms</code>. Calculate the mean and median wind speed in knots of storms grouped by <code>category</code> from the data set <code>storms</code>.</p>
+<div id="librarydplyr" class="section level2">
+<h2><code>library(dplyr)</code></h2>
+<ul>
+<li>Seven-point-five functions:</li>
+</ul>
+<ol style="list-style-type: decimal">
+<li><code>select()</code></li>
+<li><code>rename()</code></li>
+<li><code>filter()</code></li>
+<li><code>arrange()</code> and <code>desc()</code></li>
+<li><code>mutate()</code></li>
+<li><code>summarize()</code></li>
+<li><code>group_by()</code></li>
+</ol>
+</div>
+<div id="more-resources" class="section level2">
+<h2>More resources</h2>
+<ul>
+<li><a href="http://r4ds.had.co.nz/">R for Data Science</a></li>
+<li><a href="https://ui-research.github.io/r-at-urban/intro-to-r.html">Urban Institute intro to R page</a></li>
+</ul>
+</div>
+<div id="day-2" class="section level2">
+<h2>Day 2</h2>
+<div id="data-visualization" class="section level3">
+<h3>Data visualization</h3>
+</div>
+<div id="plot" class="section level3">
+<h3>Plot</h3>
+</div>
+<div id="theory" class="section level3">
+<h3>Theory</h3>
+</div>
+<div id="theme" class="section level3">
+<h3>Theme</h3>
+</div>
+<div id="mapping" class="section level3">
+<h3>Mapping</h3>
+</div>
+</div>
+<div id="day-3" class="section level2">
+<h2>Day 3</h2>
+<div id="rproj" class="section level3">
+<h3>.Rproj</h3>
+</div>
+<div id="loading-data" class="section level3">
+<h3>Loading data</h3>
+<ul>
+<li><code>library(readr)</code></li>
+<li><code>library(readxl)</code></li>
+</ul>
+</div>
+</div>
+<div id="day-4" class="section level2">
+<h2>Day 4</h2>
+<div id="r-markdown-crashcourse" class="section level3">
+<h3>R Markdown crashcourse</h3>
+</div>
+<div id="putting-it-all-together" class="section level3">
+<h3>Putting it all together</h3>
+<ul>
+<li>Load own data set</li>
+<li>Summary statistics</li>
+<li>Plot</li>
+</ul>
+</div>
+<div id="the-bigger-picture" class="section level3">
+<h3>The bigger picture</h3>
+<ul>
+<li>Version control</li>
+<li>Collaboration</li>
+</ul>
+</div>
+<div id="drawing-the-rest-of-the-owl" class="section level3">
+<h3>Drawing the rest of The Owl</h3>
+<ul>
+<li>What we didn’t cover</li>
+<li>Functions</li>
+<li>Control structures/flows</li>
+<li>R lunch labs</li>
+<li>Urban Institute R website</li>
+</ul>
+</div>
 </div>
 </div>
 
