@@ -142,25 +142,25 @@ $(document).ready(function () {
 <li>Data frames are the only appropriate input for <code>library(ggplot2)</code>.</li>
 </ul>
 </div>
-<div id="jump-right-in" class="section level2">
-<h2>Jump right in</h2>
+<div id="jump-right-in-with-ggplot2" class="section level2">
+<h2>Jump right in with ggplot2</h2>
 <ul>
 <li><a href="https://ui-research.github.io/r-at-urban/graphics-guide.html">Graphics guide</a></li>
 </ul>
-<div id="example-1" class="section level3">
-<h3>Example 1</h3>
-<pre><code>library(ggplot2) # loaded in library(tidyverse)
+<div id="example-1" class="section level4">
+<h4>Example 1</h4>
+<pre><code>library(tidyverse) 
 
 ggplot(data = storms, mapping = aes(x = pressure, y = wind)) + 
   geom_point()</code></pre>
 </div>
-<div id="example-2" class="section level3">
-<h3>Example 2</h3>
+<div id="example-2-3rd-dimension" class="section level4">
+<h4>Example 2 (3rd-dimension)</h4>
 <pre><code>ggplot(data = storms, mapping = aes(x = pressure, y = wind, color = category)) + 
   geom_point(alpha = 0.2)</code></pre>
 </div>
-<div id="example-3" class="section level3">
-<h3>Example 3</h3>
+<div id="example-3-munging-and-layers" class="section level4">
+<h4>Example 3 (munging and layers)</h4>
 <pre><code>storms %&gt;%  
   filter(category &gt; 0) %&gt;%
   distinct(name, year) %&gt;%
@@ -168,6 +168,17 @@ ggplot(data = storms, mapping = aes(x = pressure, y = wind)) +
   ggplot(mapping = aes(x = year, y = n)) + 
   geom_line() +
   geom_point()</code></pre>
+</div>
+<div id="example-4-layers" class="section level4">
+<h4>Example 4 (layers)</h4>
+<pre><code>ggplot(data = storms, mapping = aes(x = pressure, y = wind)) + 
+  geom_point() +
+  geom_smooth()</code></pre>
+</div>
+<div id="example-5-barstatistical-transformation" class="section level4">
+<h4>Example 5 (bar/statistical transformation)</h4>
+<pre><code>ggplot(data = storms, aes(category)) + 
+  geom_bar()</code></pre>
 <ul>
 <li>Make a bar plot by copying-and-pasting code</li>
 </ul>
@@ -202,6 +213,11 @@ ggplot(data = storms, mapping = aes(x = pressure, y = wind)) +
 </ul></li>
 <li><em>Geometric objects</em> are representations of the data, including points, lines, and polygons.</li>
 <li><em>Scales</em> turn data values, which are quantitative or categorical, into aesthetic values.</li>
+</ol>
+<ul>
+<li>This includes not only the x-axis and y-axis, but the ranges of sizes, shapes, and colors of aesthetics.</li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
 <li><em>Coordinate systems</em> map scaled geometric objects to the position of objects on the plane of a plot. The two most popular coordinate systems are the Cartesian coordinate system and the polar coordinate system.</li>
 <li><em>Facets</em> (optional) break data into meaningful subsets.
 <ul>
@@ -213,16 +229,25 @@ ggplot(data = storms, mapping = aes(x = pressure, y = wind)) +
 </div>
 <div id="styling" class="section level2">
 <h2>Styling</h2>
-<p><code>source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme.R')</code></p>
-<pre><code>library(urbnthemes)
+<div id="old-method" class="section level4">
+<h4>Old method</h4>
+<p><code>source(&quot;https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme.R&quot;)</code></p>
+</div>
+<div id="new-method" class="section level4">
+<h4>New method</h4>
+<pre><code>install.packages(&quot;devtools&quot;)
+devtools::install_github(&quot;UI-Research/urbnthemes&quot;)
+
+library(urbnthemes)
 set_urban_defaults(style = &quot;print&quot;)</code></pre>
-<div id="mapping" class="section level3">
-<h3>Mapping</h3>
+</div>
+</div>
+<div id="mapping" class="section level2">
+<h2>Mapping</h2>
 <ul>
 <li><a href="https://github.com/UrbanInstitute/urbnmapr">library(urbnmapr)</a></li>
 <li><a href="https://ui-research.github.io/r-at-urban/mapping.html">Urban Institute R Users Group website: mapping</a></li>
 </ul>
-</div>
 </div>
 <div id="resources" class="section level2">
 <h2>Resources</h2>
@@ -231,6 +256,7 @@ set_urban_defaults(style = &quot;print&quot;)</code></pre>
 <li><a href="https://medium.com/@urban_institute/why-the-urban-institute-visualizes-data-with-ggplot2-46d8cfc7ee67">Why the Urban Institute visualizes data with ggplot2</a></li>
 <li><a href="http://r4ds.had.co.nz/data-visualisation.html">R for Data Science: data visualization</a></li>
 <li><a href="https://awunderground.github.io/ggplot2-themes/">awunderground themes</a></li>
+<li><a href="https://www.r-graph-gallery.com/">R Graph Gallery</a></li>
 </ul>
 </div>
 </div>
