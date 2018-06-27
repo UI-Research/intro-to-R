@@ -26,8 +26,12 @@ Capitalize `name` in the `storms` data set and assign it to a new data set with 
 
 ## Exercise 7
 
-Find any storms that were active on June 20th. 
+Find any storms that were active in June. Find any storms that were active on the 20th of a month. Find any storms that were active on June 20th. 
 
 ## Exercise 8
 
 `wind` is measured in knots. Convert `wind` into miles per hour. Each knot is equal to 1.15078 miles per hour.
+
+## Exercise 9
+
+Calculate the mean and median wind speed in knots from the data set `storms`. Calculate the mean and median wind speed in knots of storms grouped by `category` from the data set `storms`.

@@ -33,8 +33,4 @@ vignettes/*.pdf
 *.knit.md
 .Rproj.user
 
-*states/
-*output/
-*.Rproj
-
 *.db
