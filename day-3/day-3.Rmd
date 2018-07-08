@@ -1,17 +1,27 @@
 ---
-title: "Day 3 - Loading Data"
-output: html_document
+output:
+  md_document:
+    variant: markdown_github
 ---
+
+# Day 3 - Loading Data
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## tldr
+## (Almost) All You Need
 
 ```{r, eval=FALSE}
 library(readr)
 df <- read_csv(file = 'path/to/file')
+```
+
+A quick demo:
+
+```{r}
+df <- readr::read_csv('data/example.csv')
+head(df)
 ```
 
 ## The `readr` Package
@@ -23,14 +33,23 @@ library(readr)
 library(dplyr)
 ```
 
+To import your data, `readr` does three things:
 
+1. Read your file and parse it into a matrix of strings
+2. Determine the type of each column
+3. Parse each column into its specific type
+
+In order to parse a block of text into the rectangular format you want, `readr` 
+needs to know how that text is delimited. Most times your delimiter will be a 
+comma (i.e., csv - comma separated values). Other common delimiters are tab, 
+pipe ('|'), and semicolon.
 
 ```{r}
-read_delim('x,y,z\n1,2,3', delim = ',')
+read_delim('x,y,z\n1,2.5,apple', delim = ',')
 ```
 
 ```{r}
-read_delim('x|y|z\n1|2|3', delim = '|')
+read_delim('x|y|z\n1|2.5|apple', delim = '|')
 ```
 
 The `read_csv` and `read_tsv` are convenience wrappers around `read_delim`, 
@@ -46,27 +65,48 @@ read_tsv('x\ty\tz\n1\t2\t3')
 
 ## Parsing Issues
 
-```{r, warning=FALSE}
-df <- read_csv('data/example.csv')
+Sometimes there will be an issue in your data file and `readr` will return a parsing failure.
+
+```{r}
+df <- read_csv('data/parsing_failure.csv')
 tail(df)
 ```
 
+You can use the `problems` function to convert the output into a `tibble` as you work through the issues: 
+
 ```{r}
-problems(df)
+failures <- problems(df)
+failures
 ```
+
+Sometimes your file will return a lot of parsing failures, which can be 
+overwhelming. A lot of times this is just the same error appearing in each row 
+of a certain column. You can use the `unique` function to help break your 
+issues down into more manageable chunks.
+
+```{r}
+unique(failures$col)
+unique(failures$expected)
+```
+
 
 The issue is that the `read_*` functions will read in the first 1000 lines of a 
 file and use that to guess the column type. The `guess_max` argument can be set 
 higher if needed.
 
 ```{r}
-df <- read_csv('data/example.csv', guess_max = 1001)
+df <- read_csv('data/parsing_failure.csv', guess_max = 1001)
 tail(df)
 ```
 
+Increasing `guess_max` can be time consuming, especially on larger files. A 
+better practice is to explicity set the column types in the `col_types`
+argument. In this case we tell `read_csv`  that `x` is a double vector and `y` 
+is a character vector.
+
 ```{r}
 df <- read_csv(
-    'data/example.csv',
+    'data/parsing_failure.csv',
     col_types = cols(
       x = col_double(), 
       y = col_character()
@@ -76,11 +116,15 @@ df <- read_csv(
 tail(df)
 ```
 
+Setting your column types is a good practice to get in to. If your data file 
+changes at some point, you'll quickly catch it in the parsing failures, as 
+opposed to your code 'failing silently'. Setting the column types directly 
+also improves the speed of the data read:
+
 ```{r, message=FALSE}
 microbenchmark::microbenchmark(
   guess = read_csv(
-    'data/example.csv', 
-    guess_max = 1001),
+    'data/example.csv'),
   specified = read_csv(
     'data/example.csv',
     col_types = cols(
@@ -92,36 +136,77 @@ microbenchmark::microbenchmark(
 )
 ```
 
+Setting the type of each column can be time consuming on wide data sets. Use 
+the `spec_*` family of functions to have `readr` create the initial guess 
+of column specifications. You can then go back and edit the ones with 
+parsing issues:
+
+```{r}
+columns <- spec_csv('data/parsing_failure.csv')
+columns$cols$x <- col_double()
+
+df <- read_csv('data/parsing_failure.csv', col_types = columns)
+tail(df)
+```
+
+
 ## Vector Types
 
-### logical
+There are four main data types within R:
 
-### integer
+1. logical
 
-### double
+2. integer
 
-### character
+3. double
+
+4. character
 
 
 ## Object Size
 
 ```{r}
-df_char <- read_csv(
-    'data/example.csv',
-    col_types = cols(
-      x = col_double(), 
-      y = col_character()
-    )
-  )
-
-pryr::object_size(df_char)
+zero_one <- c('0','1','1','0','0','0','1','1')
+object.size(parse_integer(zero_one))
+object.size(parse_double(zero_one))
+object.size(parse_character(zero_one))
 ```
 
-```{r}
-df_factor <- df_char %>%
-  mutate(y = as.factor(y))
+## Excel Workbooks - `readxl`
 
-pryr::object_size(df_factor)
+For data in Excel (`.xlsx` / `.xls`) format, the `readxl` package provides 
+similar functionality to `readr`:
+
+```{r}
+library(readxl)
+df <- read_excel('data/example.xlsx')
+head(df)
+```
+
+You can also specify the sheet and range of cells to use:
+
+```{r}
+df <- read_excel('data/example.xlsx', sheet = 'second_sheet', range = 'A1:A3')
+head(df)
+```
+
+Note - For heavily formatted or othewise non-tidy data, you may want to try 
+the `tidyxl` package.
+
+## Importing from Other Statistical Software - `haven`
+
+The `haven` package includes a number of functions to read and write data to 
+and from other formats:
+
+* `read_dta`/`write_dta` for Stata
+* `read_sas`/`write_sas` for SAS
+* `read_sav`/`write_sav` for SPSS
+
+```{r}
+library(haven)
+df_stata <- read_dta('data/example.dta')
+head(df_stata)
+write_dta(df_stata, 'data/example.dta', version = 15)
 ```
 
 ## The `jsonlite` Package
@@ -130,8 +215,6 @@ pryr::object_size(df_factor)
 library(jsonlite)
 data_json <- fromJSON('data/sample.json')
 ```
-
-
 
 ## Resources
 
