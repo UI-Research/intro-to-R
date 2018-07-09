@@ -1,13 +1,14 @@
 ---
-output:
-  md_document:
-    variant: markdown_github
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
 ---
 
 # Day 3 - Loading Data
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 ```
 
 ## (Almost) All You Need
@@ -20,7 +21,7 @@ df <- read_csv(file = 'path/to/file')
 A quick demo:
 
 ```{r}
-df <- readr::read_csv('data/example.csv')
+df <- readr::read_csv('day-3/data/example.csv')
 head(df)
 ```
 
@@ -65,10 +66,11 @@ read_tsv('x\ty\tz\n1\t2\t3')
 
 ## Parsing Issues
 
-Sometimes there will be an issue in your data file and `readr` will return a parsing failure.
+Sometimes there will be an issue in your data file and `readr` will return a parsing failure. This is probably the most common problem you will have when 
+reading in your data.
 
 ```{r}
-df <- read_csv('data/parsing_failure.csv')
+df <- read_csv('day-3/data/parsing_failure.csv')
 tail(df)
 ```
 
@@ -95,8 +97,9 @@ file and use that to guess the column type. The `guess_max` argument can be set
 higher if needed.
 
 ```{r}
-df <- read_csv('data/parsing_failure.csv', guess_max = 1001)
+df <- read_csv('day-3/day-3/data/parsing_failure.csv', guess_max = 1001)
 tail(df)
+read_csv('')
 ```
 
 Increasing `guess_max` can be time consuming, especially on larger files. A 
@@ -106,7 +109,7 @@ is a character vector.
 
 ```{r}
 df <- read_csv(
-    'data/parsing_failure.csv',
+    'day-3/data/parsing_failure.csv',
     col_types = cols(
       x = col_double(), 
       y = col_character()
@@ -124,9 +127,9 @@ also improves the speed of the data read:
 ```{r, message=FALSE}
 microbenchmark::microbenchmark(
   guess = read_csv(
-    'data/example.csv'),
+    'day-3/data/example.csv'),
   specified = read_csv(
-    'data/example.csv',
+    'day-3/data/example.csv',
     col_types = cols(
       x = col_double(), 
       y = col_character()
@@ -142,10 +145,10 @@ of column specifications. You can then go back and edit the ones with
 parsing issues:
 
 ```{r}
-columns <- spec_csv('data/parsing_failure.csv')
+columns <- spec_csv('day-3/data/parsing_failure.csv')
 columns$cols$x <- col_double()
 
-df <- read_csv('data/parsing_failure.csv', col_types = columns)
+df <- read_csv('day-3/data/parsing_failure.csv', col_types = columns)
 tail(df)
 ```
 
@@ -155,15 +158,23 @@ tail(df)
 There are four main data types within R:
 
 1. logical
+  - `c(TRUE, FALSE, FALSE)`
+  - use `col_logical()` in `readr`
 
 2. integer
+  - `c(1L, 2L, 3L)`
+  - use `col_integer()` in `readr`
 
-3. double
+3. double (sometimes called numeric)
+  - `c(1.5, 2.5, 3.5)`
+  - use `col_double()` in `readr`
 
 4. character
+  - `c('apple', 'banana', 'pear')`
+  - use `col_character()` in `readr`
 
-
-## Object Size
+Properly setting vector types in `readr` can make a big difference on the amount
+of memory your data consumes, especially for large files.
 
 ```{r}
 zero_one <- c('0','1','1','0','0','0','1','1')
@@ -172,6 +183,64 @@ object.size(parse_double(zero_one))
 object.size(parse_character(zero_one))
 ```
 
+There are a couple other column specifications you can use within `readr`:
+
+* `col_number()` can better handle numeric data that contains formatting
+* `col_datetime()` for date/time data
+
+```{r}
+parse_number(c("0%", "10%", "150%"))
+parse_datetime("2010-10-01 21:45")
+```
+
+The `col_datetime()` specification allows you to do some quick and easy 
+comparisons:
+
+```{r}
+start <- parse_datetime("2010-10-01 21:45")
+end <- parse_datetime("2010-10-07 21:45")
+end - start
+```
+
+Be sure to check out the `readr` documentation to get a better understanding of 
+the full range of date/time options.
+
+## Saving Data
+
+Once your data are loaded into R, use `saveRDS` to save your data frame as an 
+`.rds` file. You can then use `readRDS` when you need to load it back into an 
+R session. 
+
+```{r}
+saveRDS(df, file = 'day-3/data/example.rds')
+readRDS('day-3/data/example.rds')
+```
+
+An `.rds` file will generally be smaller than the original `.csv` or 
+`.txt`, and will often times load faster.
+
+```{r}
+microbenchmark::microbenchmark(
+  csv = read_csv(
+    'day-3/data/example.csv',
+    col_types = cols(
+      x = col_double(), 
+      y = col_character()
+    )
+  ),
+  rds = readRDS('day-3/data/example.rds'),
+  control = list(warmup = 10)
+)
+```
+
+If you need to save your data back to `.csv`, you can use the `write_csv` 
+function:
+
+```{r}
+write_csv(df, file = 'day-3/data/example_modified.csv')
+```
+
+
 ## Excel Workbooks - `readxl`
 
 For data in Excel (`.xlsx` / `.xls`) format, the `readxl` package provides 
@@ -179,14 +248,14 @@ similar functionality to `readr`:
 
 ```{r}
 library(readxl)
-df <- read_excel('data/example.xlsx')
+df <- read_excel('day-3/data/example.xlsx')
 head(df)
 ```
 
 You can also specify the sheet and range of cells to use:
 
 ```{r}
-df <- read_excel('data/example.xlsx', sheet = 'second_sheet', range = 'A1:A3')
+df <- read_excel('day-3/data/example.xlsx', sheet = 'second_sheet', range = 'A1:A3')
 head(df)
 ```
 
@@ -204,18 +273,19 @@ and from other formats:
 
 ```{r}
 library(haven)
-df_stata <- read_dta('data/example.dta')
+df_stata <- read_dta('day-3/day-3/data/example.dta')
 head(df_stata)
-write_dta(df_stata, 'data/example.dta', version = 15)
+write_dta(df_stata, 'day-3/day-3/data/example.dta', version = 15)
 ```
 
-## The `jsonlite` Package
+## Non-tabular Data - `jsonlite`
 
 ```{r}
 library(jsonlite)
-data_json <- fromJSON('data/sample.json')
+data_json <- fromJSON('day-3/data/sample.json')
 ```
 
 ## Resources
 
 * [r4ds.had.co.nz/data-import.html](r4ds.had.co.nz/data-import.html)
+* [readr vignette](https://cran.r-project.org/web/packages/readr/vignettes/readr.html)
