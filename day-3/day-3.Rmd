@@ -27,11 +27,10 @@ head(df)
 
 ## The `readr` Package
 
-Load the `readr` package. We'll also load `dplyr` for some data cleaning.
+Load the `readr` package, which is part of the `tidyverse`.
 
 ```{r packages, message=FALSE}
 library(readr)
-library(dplyr)
 ```
 
 To import your data, `readr` does three things:
@@ -97,9 +96,8 @@ file and use that to guess the column type. The `guess_max` argument can be set
 higher if needed.
 
 ```{r}
-df <- read_csv('day-3/day-3/data/parsing_failure.csv', guess_max = 1001)
+df <- read_csv('day-3/data/parsing_failure.csv', guess_max = 1001)
 tail(df)
-read_csv('')
 ```
 
 Increasing `guess_max` can be time consuming, especially on larger files. A 
@@ -186,11 +184,13 @@ object.size(parse_character(zero_one))
 There are a couple other column specifications you can use within `readr`:
 
 * `col_number()` can better handle numeric data that contains formatting
-* `col_datetime()` for date/time data
+* `col_datetime()` for datetime data
+  - Also `col_time()` for time data and `col_date` for date data
 
 ```{r}
 parse_number(c("0%", "10%", "150%"))
 parse_datetime("2010-10-01 21:45")
+parse_date("1977-10-16")
 ```
 
 The `col_datetime()` specification allows you to do some quick and easy 
@@ -198,7 +198,7 @@ comparisons:
 
 ```{r}
 start <- parse_datetime("2010-10-01 21:45")
-end <- parse_datetime("2010-10-07 21:45")
+end <- parse_datetime("2010-10-08 21:45")
 end - start
 ```
 
@@ -218,6 +218,11 @@ readRDS('day-3/data/example.rds')
 
 An `.rds` file will generally be smaller than the original `.csv` or 
 `.txt`, and will often times load faster.
+
+```{r}
+file.size('day-3/data/example.csv')
+file.size('day-3/data/example.rds')
+```
 
 ```{r}
 microbenchmark::microbenchmark(
@@ -240,6 +245,16 @@ function:
 write_csv(df, file = 'day-3/data/example_modified.csv')
 ```
 
+## Your Turn
+
+The `readr` package comes with a built-in `challenge.csv` file, which has been 
+copied to `day-3/data/` for you. Reading it in with the base arguments 
+will return 1,000 parsing errors. Try your best to work your way through the 
+issues.
+
+```{r}
+df <- read_csv('day-3/data/challenge.csv')
+```
 
 ## Excel Workbooks - `readxl`
 
