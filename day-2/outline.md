@@ -10,12 +10,12 @@
 * The toughest part of data visualization is data munging. 
 * Data frames are the only appropriate input for `library(ggplot2)`. 
 
-## Jump right in
+## Jump right in with ggplot2
 * [Graphics guide](https://ui-research.github.io/r-at-urban/graphics-guide.html)
 
-#### Example 1 ()
+#### Example 1
 ```
-library(ggplot2) # loaded in library(tidyverse)
+library(tidyverse) 
 
 ggplot(data = storms, mapping = aes(x = pressure, y = wind)) + 
   geom_point()
@@ -27,7 +27,7 @@ ggplot(data = storms, mapping = aes(x = pressure, y = wind, color = category)) +
   geom_point(alpha = 0.2)
 ```
 
-#### Example 3 (munging)
+#### Example 3 (munging and layers)
 ```
 storms %>%  
   filter(category > 0) %>%
@@ -45,12 +45,11 @@ ggplot(data = storms, mapping = aes(x = pressure, y = wind)) +
   geom_smooth()
 ```
 
-#### Example 5 (bar)
+#### Example 5 (bar/statistical transformation)
 ```
 ggplot(data = storms, aes(category)) + 
   geom_bar()
 ```
-
 
 * Make a bar plot by copying-and-pasting code
 
@@ -73,6 +72,7 @@ ggplot(data = storms, aes(category)) +
     * Aesthetic mappings like color and size vary with the values of variables. Color, fill, shape, transparency, and size can be added in ways that don't vary with the day by including them outside of `aes()`.
 3. *Geometric objects* are representations of the data, including points, lines, and polygons.
 4. *Scales* turn data values, which are quantitative or categorical, into aesthetic values.
+  * This includes not only the x-axis and y-axis, but the ranges of sizes, shapes, and colors of aesthetics.
 5. *Coordinate systems* map scaled geometric objects to the position of objects on the plane of a plot. The two most popular coordinate systems are the Cartesian coordinate system and the polar coordinate system.
 6. *Facets* (optional) break data into meaningful subsets.
     * `facet_wrap()`, `facet_grid()`, and `facet_geo()`
@@ -81,9 +81,15 @@ ggplot(data = storms, aes(category)) +
 
 ## Styling
 
-`source('https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme.R')`
+#### Old method
 
+`source("https://raw.githubusercontent.com/UrbanInstitute/urban_R_theme/master/urban_theme.R")`
+
+#### New method
 ```
+install.packages("devtools")
+devtools::install_github("UI-Research/urbnthemes")
+
 library(urbnthemes)
 set_urban_defaults(style = "print")
 ```
